@@ -6,3 +6,16 @@ html, body, .fill{
     margin: 0;
     padding: 0;
 }
+
+.content-container{
+    margin-bottom: 48px;
+}
+
+.tab-container{
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 48px;
+    overflow: hidden;
+}
