@@ -37,3 +37,20 @@ html, body, .fill, [data-reactroot]{
     transform: scale(1.5, 1.5);
     transform-origin: 0 0
 }
+
+.register-calender-container > .react-datepicker{
+    border: none;
+    border-radius: 0;
+}
+
+.register-calender-container .react-datepicker__header{
+    background-color: transparent;
+}
+
+.register-calender-container .react-datepicker__day:hover{
+    border-radius: 1.2em;
+}
+
+.register-calender-container .react-datepicker__day--selected{
+    border-radius: 1.2em;
+}

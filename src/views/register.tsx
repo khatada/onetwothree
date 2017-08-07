@@ -3,6 +3,7 @@ import {AppBar} from "material-ui";
 import DatePicker from "react-datepicker";
 import * as moment from "moment";
 import 'react-datepicker/dist/react-datepicker.css';
+moment.locale(navigator.language)
 
 export class Register extends React.Component<any, any> {
 
