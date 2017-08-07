@@ -1,14 +1,18 @@
 
-html, body, .fill{
+html, body, .fill, [data-reactroot]{
     position: relative;
     width: 100%;
     height: 100%;
     margin: 0;
     padding: 0;
+    overflow: hidden;
 }
 
 .content-container{
-    margin-bottom: 48px;
+    padding-bottom: 48px;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .tab-container{
@@ -18,4 +22,18 @@ html, body, .fill{
     bottom: 0;
     height: 48px;
     overflow: hidden;
+}
+
+.task-list{
+    padding: 7px;
+}
+
+.task-item-rank{
+    font-size: large;
+    
+}
+
+.register-calender-container{
+    transform: scale(1.5, 1.5);
+    transform-origin: 0 0
 }
