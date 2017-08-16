@@ -86,7 +86,8 @@ class Root extends React.Component<{}, AppState> {
   }
 
   onRequestChangeMode(navigator, mode: Mode){
-    navigator.pushPage({
+    console.log(mode);
+    navigator.resetPage({
       title: Mode[mode],
       hasBackButton: false
     });
@@ -113,14 +114,14 @@ class Root extends React.Component<{}, AppState> {
     const mode:Mode = Mode[route.title as string];
     if(mode === Mode.Normal){
       return <Page key={mode}>
-          <Tabbar index={0} renderTabs={this.renderTabs.bind(this, route, navigator)} animation="fade" />
+          <Tabbar index={1} renderTabs={this.renderTabs.bind(this, route, navigator)} animation="fade" />
       </Page>
     }else if(mode === Mode.RegisterWizardPlus){
-      return <RegisterWizardPage key={mode} />
+      return <RegisterWizardPage key={mode} type="plus" onRequestChangeMode={this.onRequestChangeMode.bind(this, navigator)}/>
     }else if(mode === Mode.RegisterWizardMinus){
-      return <RegisterWizardPage key={mode} />
+      return <RegisterWizardPage key={mode} type="minus" onRequestChangeMode={this.onRequestChangeMode.bind(this, navigator)}/>
     }else{
-      return <Tabbar key={mode} index={0} renderTabs={this.renderTabs.bind(this, route, navigator)} animation="fade" />
+      return <Page key={mode}/>
     }
   }
 

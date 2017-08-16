@@ -64,3 +64,19 @@ html, body, .fill, [data-reactroot]{
 .register-top-button-minus{
     background-color: #CCF;
 }
+
+.register-select-kind-container{
+    width: 100%;
+}
+
+.register-select-kind-button{
+    background-color: #CFC;
+    display: inline-block;
+    box-sizing: border-box;
+    color: #222;
+    width: 100%;
+    height: 120px;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.5em;
+}
