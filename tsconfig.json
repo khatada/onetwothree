@@ -8,7 +8,11 @@
         "jsx": "react",
         "noImplicitUseStrict": true,
         "declaration": true,
-        "stripInternal": true
+        "stripInternal": true,
+        "baseUrl": ".",
+        "paths": {
+            "*": ["node_modules/@zhishinet-types/*"]
+        }
     },
     "exclude": [
         "node_modules",

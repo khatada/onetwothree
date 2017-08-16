@@ -8,31 +8,6 @@ html, body, .fill, [data-reactroot]{
     overflow: hidden;
 }
 
-.content-container{
-    padding-bottom: 48px;
-    height: 100%;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.tab-container{
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 48px;
-    overflow: hidden;
-}
-
-.task-list{
-    padding: 7px;
-}
-
-.task-item-rank{
-    font-size: large;
-    
-}
-
 .register-calender-container{
     transform: scale(1.5, 1.5);
     transform-origin: 0 0
@@ -53,4 +28,39 @@ html, body, .fill, [data-reactroot]{
 
 .register-calender-container .react-datepicker__day--selected{
     border-radius: 1.2em;
+}
+
+.vertical-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+
+.register-top-button-container{
+    text-align: center;
+}
+
+.register-top-button{
+    display: inline-block;
+    box-sizing: border-box;
+    
+    color: white;
+    width: 90%;
+    height: 160px;
+    padding: 15px;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.register-top-button-plus{
+    background-color: #FCC;
+}
+
+.register-top-button-minus{
+    background-color: #CCF;
 }

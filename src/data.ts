@@ -8,10 +8,17 @@ export enum TaskState{
     Canceled
 }
 
+export enum Mode{
+    Normal,
+    RegisterWizardPlus,
+    RegisterWizardMinus
+}
+
 export interface AppState{
     tasks: Task[];
-    doneTasks: Task[];
+    history: Task[];
     schedules: Schedule[];
+    mode: Mode;
 }
 
 export interface Task{

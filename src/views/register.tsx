@@ -1,24 +1,47 @@
 import * as React from "react";
-import DatePicker from "react-datepicker";
-import * as moment from "moment";
-import 'react-datepicker/dist/react-datepicker.css';
-moment.locale(navigator.language)
+import {Page, Toolbar, Row, Col} from "react-onsenui";
 
-export class Register extends React.Component<any, any> {
+import {Mode} from "../data";
+
+export interface RegisterPageProps{
+    onRequestChangeMode: (mode: Mode)=>void;
+}
+
+export class RegisterPage extends React.Component<RegisterPageProps, any> {
 
     state = {
-        startDate: moment(),
     }
 
-    handleChange(){
+    onStartWizardPlusClick(){
+        this.props.onRequestChangeMode(Mode.RegisterWizardPlus);
+    }
 
+    onStartWizardMinusClick(){
+        this.props.onRequestChangeMode(Mode.RegisterWizardMinus);
     }
 
     render() {
-        return <div className="fill">
-            <div className="register-calender-container">
-                <DatePicker inline={true} selected={this.state.startDate} onChange={this.handleChange.bind(this)}/>
+        return <Page renderToolbar={() => {
+            return <Toolbar>
+                <div className="center">タスクを登録</div>
+            </Toolbar>
+        }}>
+            <div className="vertical-center register-top-button-container">
+                <Row>
+                    <Col>
+                        <button className="register-top-button register-top-button-plus"
+                            onClick={this.onStartWizardPlusClick.bind(this)}>
+                            足し算
+                        </button>
+                    </Col>
+                    <Col>
+                        <button className="register-top-button register-top-button-minus" 
+                            onClick={this.onStartWizardMinusClick.bind(this)}>
+                            引き算
+                        </button>
+                    </Col>
+                </Row>
             </div>
-        </div>
+        </Page>
     }
 }

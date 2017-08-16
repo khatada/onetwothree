@@ -2,14 +2,14 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import * as ReactRouter from "react-router";
 
-import {Page, Tabbar, Tab, Toolbar} from "react-onsenui";
+import {Page, Tabbar, Tab, Toolbar, Navigator} from "react-onsenui";
 import "onsenui";
 
 import "../style/index.css";
-import {Task, AppState} from "./data";
+import {Task, Mode, AppState, TaskState} from "./data";
 import {HomePage} from "./views/home";
-import {Goal} from "./views/goal";
-import {Register} from "./views/register";
+import {RegisterPage} from "./views/register";
+import {RegisterWizardPage} from "./views/register-wizard";
 
 const injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
@@ -35,7 +35,7 @@ class SettingsPage extends React.Component<any, any> {
     render() {
         return <Page renderToolbar={() => {
                 return <Toolbar>
-                        <div className='center'>Title</div>
+                        <div className="center">設定</div>
                     </Toolbar>
                 }}>
                 <div>
@@ -45,67 +45,111 @@ class SettingsPage extends React.Component<any, any> {
     }
 }
 
-class Root extends React.Component<any, any> {
-  renderTabs() {
+class Root extends React.Component<{}, AppState> {
+  state:AppState = {
+    mode: Mode.Normal,
+    history: [],
+    tasks: [{
+      type: "minus",
+      kind: "掃除",
+      title: "玄関を掃除する",
+      rank: 1,
+      state: TaskState.Ready,
+      doneDate: null,
+      dueDate: new Date()
+    },{
+      type: "minus",
+      kind: "ゴミ出し",
+      title: "燃えるゴミを出す",
+      rank: 1,
+      state: TaskState.Ready,
+      doneDate: null,
+      dueDate: new Date()
+    },{
+      type: "plus",
+      kind: "買い物",
+      title: "ゴミ袋を買う",
+      rank: 1,
+      state: TaskState.Ready,
+      doneDate: null,
+      dueDate: new Date()
+    }],
+    schedules: []
+  }
+
+  componentDidMount(){
+    window["root"] = this;
+  }
+
+  componentWillUnmount(){
+    window["root"] = null;
+  }
+
+  onRequestChangeMode(navigator, mode: Mode){
+    navigator.pushPage({
+      title: Mode[mode],
+      hasBackButton: false
+    });
+  }
+
+  renderTabs(route, navigator) {
     return [
       {
-        content: <HomePage />,
-        tab: <Tab label='Home' icon='md-home' />
+        content: <RegisterPage onRequestChangeMode={this.onRequestChangeMode.bind(this, navigator)}/>,
+        tab: <Tab label="タスク登録" icon="md-plus-square" />
+      },
+      {
+        content: <HomePage {...this.state}/>,
+        tab: <Tab label="ミッション" icon="md-home" />
       },
       {
         content: <SettingsPage />,
-        tab: <Tab label='Settings' icon='md-settings' />
+        tab: <Tab label="設定" icon="md-settings" />
       }
     ]
   }
 
+  renderPage(route, navigator){
+    const mode:Mode = Mode[route.title as string];
+    if(mode === Mode.Normal){
+      return <Page key={mode}>
+          <Tabbar index={0} renderTabs={this.renderTabs.bind(this, route, navigator)} animation="fade" />
+      </Page>
+    }else if(mode === Mode.RegisterWizardPlus){
+      return <RegisterWizardPage key={mode} />
+    }else if(mode === Mode.RegisterWizardMinus){
+      return <RegisterWizardPage key={mode} />
+    }else{
+      return <Tabbar key={mode} index={0} renderTabs={this.renderTabs.bind(this, route, navigator)} animation="fade" />
+    }
+  }
+
   render() {
-    return <Tabbar index={0} renderTabs={this.renderTabs.bind(this)} animation="fade" />
+    return <Navigator
+      renderPage={this.renderPage.bind(this)}
+      initialRoute={{
+        title: Mode[this.state.mode],
+        hasBackButton: false
+      }}
+      animation="lift"
+    />
   }
 }
 
 
-// export class App extends React.Component<any, AppState> {
-
-//     state = {
-//         todayTasks:[{
-//             title: "トイレそうじ",
-//             rank: 1
-//         },{
-//             title: "玄関そうじ",
-//             rank: 2
-//         },{
-//             title: "ゴミ捨て（普通ゴミ）",
-//             rank: 3
-//         }]
-//     };
-
-//     navigate(path){
-//         const history:ReactRouter.HistoryBase = this.props.history;
-//         history.push(path);
-//     }
-
-//     render(){
-//         return <div>
-//             <div className="content-container">{React.cloneElement(this.props.children, {...this.state})}</div>
-//             <div className="tab-container">
-//                 <Tabs initialSelectedIndex={2}>
-//                     <Tab disableTouchRipple={false} disableFocusRipple={false} icon={<FontIcon className="fa fa-plus-square-o"/>} onActive={this.navigate.bind(this, "/register")}/>
-//                     <Tab disableTouchRipple={false} disableFocusRipple={false} icon={<FontIcon className="fa fa-heart-o"/>} onActive={this.navigate.bind(this, "/goal")}/>
-//                     <Tab disableTouchRipple={false} disableFocusRipple={false} icon={<FontIcon className="fa fa-home"/>} onActive={this.navigate.bind(this, "/")}/>
-//                     <Tab disableTouchRipple={false} disableFocusRipple={false} icon={<FontIcon className="fa fa-line-chart"/>} onActive={this.navigate.bind(this, "/setting")}/>
-//                     <Tab disableTouchRipple={false} disableFocusRipple={false} icon={<FontIcon className="fa fa-cog"/>} onActive={this.navigate.bind(this, "/setting")}/>
-//                 </Tabs>
-//             </div>
-//         </div>
-//     }
-// }
-
 document.addEventListener("DOMContentLoaded", ()=>{
+    function preventScroll(e :TouchEvent){
+      e.preventDefault();
+    }
+
     window.addEventListener("beforeunload", ()=>{
-        ReactDOM.unmountComponentAtNode(document.getElementById("content"));
+      document.getElementById("content").removeEventListener("touchmove", preventScroll);
+
+      ReactDOM.unmountComponentAtNode(document.getElementById("content"));
     });
 
     ReactDOM.render(<Root/>, document.getElementById("content"));
+
+    document.getElementById("content").addEventListener("touchmove", preventScroll, true);
 });
 
