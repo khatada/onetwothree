@@ -1,5 +1,4 @@
 import * as React from "react";
-import {Card, CardHeader, CardText, Paper, Avatar} from "material-ui";
 
 import {Task} from "../../data";
 
@@ -18,11 +17,12 @@ export class TaskView extends React.Component<TaskViewProps, {}> {
     }
 
     render() {
-        const rank = <Avatar size={50}>{this.props.task.rank}</Avatar>
-        return <Paper zDepth={1} style={this.style.container}>
-            <Card>
-                <CardHeader title={this.props.task.title} avatar={rank} titleStyle={this.style.title}/>
-            </Card>
-        </Paper>
+        // const rank = <Avatar size={50}>{this.props.task.rank}</Avatar>
+        // return <Paper zDepth={1} style={this.style.container}>
+        //     <Card>
+        //         <CardHeader title={this.props.task.title} avatar={rank} titleStyle={this.style.title}/>
+        //     </Card>
+        // </Paper>
+        return <div/>
     }
 }

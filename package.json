@@ -11,10 +11,11 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/material-ui": "^0.17.20",
+    "@types/onsenui": "^2.0.0",
     "@types/react": "^15.6.1",
     "@types/react-dom": "^15.5.2",
     "@types/react-router": "^2.0.50",
+    "@zhishinet-types/react-onsenui": "^0.1.4",
     "css-loader": "^0.28.4",
     "style-loader": "^0.18.2",
     "ts-loader": "2.3.2",
@@ -22,10 +23,11 @@
     "webpack": "1.15.0"
   },
   "dependencies": {
-    "material-ui": "^0.18.7",
+    "onsenui": "^2.5.2",
     "react": "^15.6.1",
     "react-datepicker": "^0.52.0",
     "react-dom": "^15.6.1",
+    "react-onsenui": "^1.5.0",
     "react-router": "^2.4.1",
     "react-tap-event-plugin": "^2.0.1"
   }
