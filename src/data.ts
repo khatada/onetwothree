@@ -19,9 +19,11 @@ export interface AppState{
     history: Task[];
     schedules: Schedule[];
     mode: Mode;
+    tabIndex: number;
 }
 
 export interface Task{
+    id: string;
     type: TaskType;
     kind: string;
     title: string;
@@ -32,11 +34,14 @@ export interface Task{
 }
 
 export interface Schedule{
-    type: TaskType;
     template: Task;
-    repeat: ScheduleRepeater;
+    time: Scheduler;
 }
 
-export interface ScheduleRepeater{
+export type Repeat = "now" | "once" | "everyday" | "week" | "twoWeek" | "month";
 
+export interface Scheduler{
+    repeat: Repeat;
+    date: Date;
+    days: number[];
 }

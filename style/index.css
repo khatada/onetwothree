@@ -80,3 +80,37 @@ html, body, .fill, [data-reactroot]{
     text-align: center;
     font-size: 1.5em;
 }
+
+.once-date-picker{
+    width: 100%;
+}
+
+.schedular-select-button-check{
+    margin-right: 5px;
+}
+.button--large--quiet .schedular-select-button-check{
+    display: none;
+}
+
+.register-summary-type{
+    text-align: center;
+}
+
+.register-summary-label{
+    font-size: 0.8em;
+    color: #666;
+}
+
+.segment-radio-selected-fix{
+    background-color: rgba(18, 114, 224, .77);
+    color: #fff;
+}
+
+.dashboard-campaign-container{
+    width: 60%;
+    margin: 0 auto;
+}
+
+.scrollable{
+    overflow: scroll;
+}

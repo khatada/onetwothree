@@ -15,6 +15,7 @@
     "@types/react": "^15.6.1",
     "@types/react-dom": "^15.5.2",
     "@types/react-router": "^2.0.50",
+    "@types/uuid": "^3.4.0",
     "@zhishinet-types/react-onsenui": "^0.1.4",
     "css-loader": "^0.28.4",
     "style-loader": "^0.18.2",
@@ -23,12 +24,15 @@
     "webpack": "1.15.0"
   },
   "dependencies": {
+    "chart.js": "^2.3.0",
     "onsenui": "^2.5.2",
     "react": "^15.6.1",
+    "react-chartjs-2": "^2.5.7",
     "react-datepicker": "^0.52.0",
     "react-dom": "^15.6.1",
     "react-onsenui": "^1.5.0",
     "react-router": "^2.4.1",
-    "react-tap-event-plugin": "^2.0.1"
+    "react-tap-event-plugin": "^2.0.1",
+    "uuid": "^3.1.0"
   }
 }

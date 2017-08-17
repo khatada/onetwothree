@@ -6,30 +6,15 @@ import {Page, Tabbar, Tab, Toolbar, Navigator} from "react-onsenui";
 import "onsenui";
 
 import "../style/index.css";
-import {Task, Mode, AppState, TaskState} from "./data";
+import {Task, Mode, AppState, TaskState, Scheduler} from "./data";
 import {HomePage} from "./views/home";
+import {DashboardPage} from "./views/dashboard";
 import {RegisterPage} from "./views/register";
 import {RegisterWizardPage} from "./views/register-wizard";
 
 const injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
 
-
-// export class Root extends React.Component<any, any> {
-//     render() {
-//         return <MuiThemeProvider>
-//             <ReactRouter.Router ref="router" history={ReactRouter.hashHistory}>
-//                 <ReactRouter.Route path="/" component={App}>
-//                     <ReactRouter.IndexRoute component={Home}/>
-//                     <ReactRouter.Route path="/register" component={Register}/>
-//                     <ReactRouter.Route path="/goal" component={Goal}/>
-//                     <ReactRouter.Route path="/setting" component={Home}/>
-//                     <ReactRouter.Route path="/*" component={Home}/>
-//                 </ReactRouter.Route>
-//             </ReactRouter.Router>
-//         </MuiThemeProvider>
-//     }
-// }
 
 class SettingsPage extends React.Component<any, any> {
     render() {
@@ -39,10 +24,24 @@ class SettingsPage extends React.Component<any, any> {
                     </Toolbar>
                 }}>
                 <div>
-                    Settings Page
+                    おうちMission
                 </div>
             </Page>
     }
+}
+
+class SchedulePage extends React.Component<any, any> {
+  render() {
+      return <Page renderToolbar={() => {
+              return <Toolbar>
+                      <div className="center">スケジュール</div>
+                  </Toolbar>
+              }}>
+              <div>
+                  おうちMission
+              </div>
+          </Page>
+  }
 }
 
 class Root extends React.Component<{}, AppState> {
@@ -50,6 +49,7 @@ class Root extends React.Component<{}, AppState> {
     mode: Mode.Normal,
     history: [],
     tasks: [{
+      id: "a0",
       type: "minus",
       kind: "掃除",
       title: "玄関を掃除する",
@@ -58,6 +58,7 @@ class Root extends React.Component<{}, AppState> {
       doneDate: null,
       dueDate: new Date()
     },{
+      id: "a1",
       type: "minus",
       kind: "ゴミ出し",
       title: "燃えるゴミを出す",
@@ -66,6 +67,7 @@ class Root extends React.Component<{}, AppState> {
       doneDate: null,
       dueDate: new Date()
     },{
+      id: "a2",
       type: "plus",
       kind: "買い物",
       title: "ゴミ袋を買う",
@@ -74,7 +76,8 @@ class Root extends React.Component<{}, AppState> {
       doneDate: null,
       dueDate: new Date()
     }],
-    schedules: []
+    schedules: [],
+    tabIndex: 2
   }
 
   componentDidMount(){
@@ -93,15 +96,45 @@ class Root extends React.Component<{}, AppState> {
     });
   }
 
-  renderTabs(route, navigator) {
+  onRequestCreateNewSchedule(task: Task, schedular: Scheduler){
+    if(schedular.repeat === "now"){
+      task.state = TaskState.Ready;
+    }
+
+    const tasks = this.state.tasks.concat(task);
+    this.setState({tasks: tasks});
+  }
+
+  onRequestDoneTask(task: Task){
+    const tasks = [].concat(this.state.tasks);
+    for(let i=0; i<tasks.length; i++){
+      const target = tasks[i];
+      if(target.id === task.id){
+        const newTask = {...target, doneDate: new Date(), state: TaskState.Done};
+        tasks[i] = newTask;
+      }
+    }
+    this.setState({tasks: tasks});
+  }
+
+  renderTabs(route, navigator, index) {
+    console.log("render-tabs", index);
     return [
       {
         content: <RegisterPage onRequestChangeMode={this.onRequestChangeMode.bind(this, navigator)}/>,
         tab: <Tab label="タスク登録" icon="md-plus-square" />
       },
       {
-        content: <HomePage {...this.state}/>,
+        content: <HomePage {...this.state} onRequestDoneTask={this.onRequestDoneTask.bind(this)}/>,
         tab: <Tab label="ミッション" icon="md-home" />
+      },
+      {
+        content: <DashboardPage {...this.state}/>,
+        tab: <Tab label="活動" icon="md-trending-up" />
+      },
+      {
+        content: <SchedulePage />,
+        tab: <Tab label="スケジュール" icon="md-alarm" />
       },
       {
         content: <SettingsPage />,
@@ -114,12 +147,27 @@ class Root extends React.Component<{}, AppState> {
     const mode:Mode = Mode[route.title as string];
     if(mode === Mode.Normal){
       return <Page key={mode}>
-          <Tabbar index={1} renderTabs={this.renderTabs.bind(this, route, navigator)} animation="fade" />
+          <Tabbar index={this.state.tabIndex}
+            renderTabs={this.renderTabs.bind(this, route, navigator)}
+            animation="none"
+            onPreChange={(event)=> {
+              if(this.state.tabIndex !== event.index){
+                this.setState({tabIndex: event.index}) 
+              }
+              }} />
       </Page>
     }else if(mode === Mode.RegisterWizardPlus){
-      return <RegisterWizardPage key={mode} type="plus" onRequestChangeMode={this.onRequestChangeMode.bind(this, navigator)}/>
+      return <RegisterWizardPage
+        key={mode}
+        type="plus"
+        onRequestChangeMode={this.onRequestChangeMode.bind(this, navigator)}
+        onRequestCreate={this.onRequestCreateNewSchedule.bind(this)}/>
     }else if(mode === Mode.RegisterWizardMinus){
-      return <RegisterWizardPage key={mode} type="minus" onRequestChangeMode={this.onRequestChangeMode.bind(this, navigator)}/>
+      return <RegisterWizardPage
+        key={mode}
+        type="minus"
+        onRequestChangeMode={this.onRequestChangeMode.bind(this, navigator)}
+        onRequestCreate={this.onRequestCreateNewSchedule.bind(this)}/>
     }else{
       return <Page key={mode}/>
     }
@@ -139,8 +187,28 @@ class Root extends React.Component<{}, AppState> {
 
 
 document.addEventListener("DOMContentLoaded", ()=>{
+    function isScrollable(element: HTMLElement){
+      if(element.className.indexOf("scrollable") >= 0){
+        return true;
+      } else {
+        if (element === document.body) {
+          return false;
+        } else {
+          const parent = element.parentElement;
+          if (parent) {
+            return isScrollable(parent);
+          } else {
+            return false;
+          }
+        }
+      }
+    }
     function preventScroll(e :TouchEvent){
-      e.preventDefault();
+      if(isScrollable(e.target as any)){
+
+      }else{
+        e.preventDefault();
+      }
     }
 
     window.addEventListener("beforeunload", ()=>{
