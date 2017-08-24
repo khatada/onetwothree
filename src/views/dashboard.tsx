@@ -94,14 +94,6 @@ export class DashboardPage extends React.Component<DashboardPageProps, {}> {
                 options={barOptions}
                 width={300}
                 height={160}/>
-                <h2>キャンペーン</h2>
-            <div className="dashboard-campaign-container">
-            <Chart.Doughnut
-                data={doughnutData}
-                options={doughnutOptions}
-                width={120}
-                height={120}/>
-            </div>
         </div>
       </Page>
   }

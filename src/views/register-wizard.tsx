@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Page, Toolbar, Navigator, BackButton, Button, ToolbarButton, Icon, Col, Row, Radio, Input, Card, List, ListItem} from "react-onsenui";
+import {Page, Toolbar, Navigator, BackButton, Button, ToolbarButton, Icon, Col, Row, Radio, Input, Card, List, ListItem, PullHook} from "react-onsenui";
 import {notification} from "onsenui";
 import {Mode, TaskType, Task, TaskState, Scheduler, Repeat} from "../data";
 import uuid = require("uuid/v4");
@@ -12,6 +12,12 @@ export interface RegisterWizardPageProps{
 
 export interface TaskKindPreset{
     label: string;
+}
+
+export interface TaskPreset{
+    title: string;
+    rate: number;
+    detail: string;
 }
 
 const plusPresets:TaskKindPreset[] = [
@@ -40,12 +46,14 @@ const minusPresets: TaskKindPreset[] = [
 
 enum WizardPage{
     SelectKind,
+    SelectList,
     SelectSchedule,
     Confirm,
 }
 
 const wizardPageTitle = {
     [WizardPage.SelectKind]: "種類を選ぶ",
+    [WizardPage.SelectList]: "見つける",
     [WizardPage.SelectSchedule]: "日時を選ぶ",
     [WizardPage.Confirm]: "確認",
 }
@@ -76,7 +84,21 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
                 repeat: "now",
                 date: new Date(),
                 days: []
-            } as Scheduler
+            } as Scheduler,
+            pullHookState: "initial",
+            presets: [{
+                title: "簡単3分玄関そうじ",
+                detail: "3分でできるそうじです",
+                rate: 3,
+            },{
+                title: "週末のお風呂そうじ",
+                detail: "週に一度浴槽の掃除をしましょう",
+                rate: 4
+            },{
+                title: "リビングの拭きそうじ",
+                rate: 5,
+                detail: "クイックルワイパーを使って簡単♩"
+            }] as TaskPreset[]
         }
 
         onBackClick(navigator){
@@ -86,7 +108,7 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
         onDiscardClick(){
             notification.confirm({
                 title: "確認",
-                message: "タスクの作成をキャンセルします",
+                message: "タスクの追加をキャンセルします",
                 callback: (result)=>{
                     if(result){
                         this.props.onRequestChangeMode(Mode.Normal);
@@ -101,7 +123,7 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
             this.setState({newTask: newTask});
 
             navigator.pushPage({
-                title: WizardPage[WizardPage.SelectSchedule],
+                title: WizardPage[WizardPage.SelectList],
                 hasBackButton: true
             });
         }
@@ -125,9 +147,20 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
             this.setState({schedular: newSchedular});
         }
 
+        onTaskClick(navigator, task: Task){
+            const newTask = {...this.state.newTask, title: task.title};
+            this.setState({newTask: newTask});
+
+
+            navigator.pushPage({
+                title: WizardPage[WizardPage.SelectSchedule],
+                hasBackButton: true
+            });
+        }
+
         onConfirmClick(){
             notification.toast({
-                message: "タスクを作成しました",
+                message: "タスクを追加しました",
                 timeout: 2000,
                 animation: "fall"
             });
@@ -135,13 +168,30 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
             this.props.onRequestChangeMode(Mode.Normal);
         }
 
+        handlePullHookChange(e){
+            this.setState({pullHookState: e.state});
+        }
+
+        renderPullHookContent(){
+            switch (this.state.pullHookState) {
+              case "initial":
+                return "Pull to refresh";
+              case "preaction":
+                return "Release";
+              case "action":
+                return "Loading...";
+            }
+          }
+
         renderToolbar(route, navigator){
             const wizardPage: WizardPage = WizardPage[route.title as string];
             const title = wizardPageTitle[wizardPage];
             const backButton = route.hasBackButton ? <BackButton onClick={this.onBackClick.bind(this, navigator)}>Back</BackButton> : null;
             return <Toolbar>
                     <div className="left">{backButton}</div>
-                    <div className="center">{title}</div>
+                    <div className="center">
+                        {title}
+                    </div>
                     <div className="right">
                         <ToolbarButton onClick={this.onDiscardClick.bind(this)}>
                             <Icon icon="md-close"></Icon>
@@ -149,6 +199,30 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
                     </div>
               </Toolbar>
         }
+
+        renderRow(navigator, row: TaskPreset, index: number) {
+            const stars = [0,1,2,3,4].map((i)=>{
+                if(i < row.rate){
+                    return <Icon icon="md-star" style={{color: "#CC0"}}></Icon>
+                }else{
+                    return <Icon icon="md-star" style={{color: "#DDD"}}></Icon>
+                }
+            })
+            return <ListItem key={index} onClick={this.onTaskClick.bind(this, navigator, row)}>
+              <div className="left">
+                  <img src={`http://placekitten.com/g/40/40`} className="list-item__thumbnail" />
+              </div>
+              <div className='center'>
+                <div>
+                    <p className="task-preset-title">{row.title}</p>
+                    <p className="task-preset-detail">{row.detail}</p>
+                <div>
+                    {stars}
+                </div>
+                </div>
+              </div>
+            </ListItem>
+          }
 
         renderPage(route, navigator){
             const wizardPage: WizardPage = WizardPage[route.title as string];
@@ -183,6 +257,15 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
                         })}
                         </div>
                     </div>
+                </Page>
+            }else if(wizardPage === WizardPage.SelectList){
+                return <Page renderToolbar={this.renderToolbar.bind(this, route, navigator)}>
+                    <PullHook onChange={this.handlePullHookChange.bind(this)} thresholdHeight={200}>
+                        {this.renderPullHookContent()}
+                    </PullHook>
+                    <List dataSource={this.state.presets}
+                        renderRow={this.renderRow.bind(this, navigator)}>
+                    </List>
                 </Page>
             }else if(wizardPage === WizardPage.SelectSchedule){
                 const repeat = this.state.schedular.repeat;

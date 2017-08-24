@@ -23,7 +23,7 @@ export class RegisterPage extends React.Component<RegisterPageProps, any> {
     render() {
         return <Page renderToolbar={() => {
             return <Toolbar>
-                <div className="center">タスクを登録</div>
+                <div className="center">タスクを探す</div>
             </Toolbar>
         }}>
             <div className="vertical-center register-top-button-container">

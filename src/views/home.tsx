@@ -59,7 +59,6 @@ export class HomePage extends React.Component<HomePageProps, {}> {
   }
 
   render() {
-    console.log("render");
     return <Page renderToolbar={() =>{
           return <Toolbar>
                     <div className="center">ミッション</div>

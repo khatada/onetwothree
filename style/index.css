@@ -114,3 +114,13 @@ html, body, .fill, [data-reactroot]{
 .scrollable{
     overflow: scroll;
 }
+
+.task-preset-title{
+    margin: 2px;
+}
+
+.task-preset-detail{
+    margin: 0;
+    font-size: 0.8em;
+    color: #666;
+}

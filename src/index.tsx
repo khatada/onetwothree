@@ -122,7 +122,7 @@ class Root extends React.Component<{}, AppState> {
     return [
       {
         content: <RegisterPage onRequestChangeMode={this.onRequestChangeMode.bind(this, navigator)}/>,
-        tab: <Tab label="タスク登録" icon="md-plus-square" />
+        tab: <Tab label="タスクを探す" icon="md-search" />
       },
       {
         content: <HomePage {...this.state} onRequestDoneTask={this.onRequestDoneTask.bind(this)}/>,
