@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Page, Toolbar, Navigator, BackButton, Button, ToolbarButton, Icon, Col, Row, Radio, Input, Card, List, ListItem, PullHook} from "react-onsenui";
+import {Page, Toolbar, Navigator, BackButton, Button, ToolbarButton, Icon, Col, Row, Radio, Input, Card, List, ListItem, PullHook, SearchInput} from "react-onsenui";
 import {notification} from "onsenui";
 import {Mode, TaskType, Task, TaskState, Scheduler, Repeat} from "../data";
 import uuid = require("uuid/v4");
@@ -263,6 +263,7 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
                     <PullHook onChange={this.handlePullHookChange.bind(this)} thresholdHeight={200}>
                         {this.renderPullHookContent()}
                     </PullHook>
+                    <SearchInput placeholder="検索" style={{width: "100%"}}/>
                     <List dataSource={this.state.presets}
                         renderRow={this.renderRow.bind(this, navigator)}>
                     </List>
