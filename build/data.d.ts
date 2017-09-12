@@ -19,6 +19,7 @@ export interface AppState {
 }
 export interface Task {
     id: string;
+    image: string;
     type: TaskType;
     kind: string;
     title: string;

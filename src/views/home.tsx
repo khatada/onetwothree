@@ -50,7 +50,7 @@ export class HomePage extends React.Component<HomePageProps, {}> {
   renderRow(row: Task, index: number) {
     return <ListItem key={index} onClick={this.onTaskClick.bind(this, row)}>
       <div className="left">
-          <img src={`http://placekitten.com/g/40/40`} className="list-item__thumbnail" />
+          <img src={row.image} className="list-item__thumbnail" />
       </div>
       <div className='center'>
         {row.title}

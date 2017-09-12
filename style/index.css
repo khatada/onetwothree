@@ -50,19 +50,23 @@ html, body, .fill, [data-reactroot]{
     box-sizing: border-box;
     border: 2px solid white;
     color: white;
-    width: 90%;
-    height: 160px;
+    width: 160px;
+    height: 216px;
     padding: 15px;
     text-align: center;
     font-size: 1.5em;
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 .register-top-button-plus{
     background-color: #FCC;
+    background-image: url(./images/plus.png);
 }
 
 .register-top-button-minus{
     background-color: #CCF;
+    background-image: url(./images/minus.png);
 }
 
 .register-select-kind-container{
@@ -125,3 +129,83 @@ html, body, .fill, [data-reactroot]{
     font-size: 0.8em;
     color: #666;
 }
+
+.task-preset-score{
+    color: #EEE;
+    border-radius: 15px;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    font-size: 1.2em;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.task-preset-score-0{
+    background-color: #FCC
+}
+
+.task-preset-score-1{
+    background-color: #FBB
+}
+
+.task-preset-score-2{
+    background-color: #FAA
+}
+
+.task-preset-score-3{
+    background-color: #F99
+}
+
+.task-preset-score-4{
+    background-color: #F88
+}
+
+.task-preset-score-5{
+    background-color: #F77
+}
+
+.task-preset-score-6{
+    background-color: #F66
+}
+
+.task-preset-score-7{
+    background-color: #F55
+}
+
+.task-preset-score-8{
+    background-color: #F44
+}
+
+.task-preset-score-9{
+    background-color: #F33
+}
+
+.task-preset-score-10{
+    background-color: #F22
+}
+
+.timeline-title{
+    font-size: 1.2em;
+}
+
+.timeline-detail{
+    font-size: 0.8em;
+    color: #666;
+}
+
+.timeline-image{
+    width: 320px;
+    height: 320px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.goal-mock{
+    background-image: url(./images/goal.jpg);
+    width: 370px;
+    height: 480px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+

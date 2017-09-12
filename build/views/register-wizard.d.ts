@@ -13,6 +13,8 @@ export interface TaskPreset {
     title: string;
     rate: number;
     detail: string;
+    score: number;
+    image: string;
 }
 export declare class RegisterWizardPage extends React.Component<RegisterWizardPageProps, any> {
     state: {
@@ -28,7 +30,7 @@ export declare class RegisterWizardPage extends React.Component<RegisterWizardPa
     onSelectRepeatClick(repeat: Repeat): void;
     onSelectScheduleClick(navigator: any): void;
     onSelectRepeatDurationClick(repeat: Repeat): void;
-    onTaskClick(navigator: any, task: Task): void;
+    onTaskClick(navigator: any, task: TaskPreset): void;
     onConfirmClick(): void;
     handlePullHookChange(e: any): void;
     renderPullHookContent(): "Pull to refresh" | "Release" | "Loading...";

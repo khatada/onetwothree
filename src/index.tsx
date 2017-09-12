@@ -5,12 +5,13 @@ import * as ReactRouter from "react-router";
 import {Page, Tabbar, Tab, Toolbar, Navigator} from "react-onsenui";
 import "onsenui";
 
-import "../style/index.css";
+// import "../style/index.css";
 import {Task, Mode, AppState, TaskState, Scheduler} from "./data";
 import {HomePage} from "./views/home";
 import {DashboardPage} from "./views/dashboard";
 import {RegisterPage} from "./views/register";
 import {RegisterWizardPage} from "./views/register-wizard";
+import {TimelinePage} from "./views/timeline";
 
 const injectTapEventPlugin = require("react-tap-event-plugin");
 injectTapEventPlugin();
@@ -48,34 +49,7 @@ class Root extends React.Component<{}, AppState> {
   state:AppState = {
     mode: Mode.Normal,
     history: [],
-    tasks: [{
-      id: "a0",
-      type: "minus",
-      kind: "掃除",
-      title: "玄関を掃除する",
-      rank: 1,
-      state: TaskState.Ready,
-      doneDate: null,
-      dueDate: new Date()
-    },{
-      id: "a1",
-      type: "minus",
-      kind: "ゴミ出し",
-      title: "燃えるゴミを出す",
-      rank: 1,
-      state: TaskState.Ready,
-      doneDate: null,
-      dueDate: new Date()
-    },{
-      id: "a2",
-      type: "plus",
-      kind: "買い物",
-      title: "ゴミ袋を買う",
-      rank: 1,
-      state: TaskState.Ready,
-      doneDate: null,
-      dueDate: new Date()
-    }],
+    tasks: [],
     schedules: [],
     tabIndex: 2
   }
@@ -102,7 +76,7 @@ class Root extends React.Component<{}, AppState> {
     }
 
     const tasks = this.state.tasks.concat(task);
-    this.setState({tasks: tasks});
+    this.setState({tasks: tasks, tabIndex: 1});
   }
 
   onRequestDoneTask(task: Task){
@@ -133,8 +107,8 @@ class Root extends React.Component<{}, AppState> {
         tab: <Tab label="活動" icon="md-trending-up" />
       },
       {
-        content: <SchedulePage />,
-        tab: <Tab label="スケジュール" icon="md-alarm" />
+        content: <TimelinePage {...this.state}/>,
+        tab: <Tab label="タイムライン" icon="md-alarm" />
       },
       {
         content: <SettingsPage />,

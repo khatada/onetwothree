@@ -18,6 +18,8 @@ export interface TaskPreset{
     title: string;
     rate: number;
     detail: string;
+    score: number;
+    image: string;
 }
 
 const plusPresets:TaskKindPreset[] = [
@@ -78,7 +80,8 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
                 state: TaskState.None,
                 doneDate: null,
                 dueDate: null,
-                title: null
+                title: null,
+                image: null
             } as Task,
             schedular: {
                 repeat: "now",
@@ -87,17 +90,41 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
             } as Scheduler,
             pullHookState: "initial",
             presets: [{
-                title: "簡単3分玄関そうじ",
-                detail: "3分でできるそうじです",
+                title: "おもちゃ箱のお片付け",
+                detail: "時間になったらおもちゃ箱を片付けよう",
                 rate: 3,
+                score: 5,
+                image: "./style/images/mission1_toybox.png"
+            },{
+                title: "食後のお片付け",
+                detail: "ご飯を食べたら食器を台所へ持って行こう「ごちそうさま」の一言を忘れずに！",
+                rate: 4,
+                score: 8,
+                image: "./style/images/mission2_carry.png"
+            },{
+                title: "食後にみんなでお片付け",
+                rate: 5,
+                detail: "みんなで仲良く洗いもの。笑い声が聞こえてきたらポイントアップ！",
+                score: 7,
+                image: "./style/images/mission3_washing.png"
             },{
                 title: "週末のお風呂そうじ",
-                detail: "週に一度浴槽の掃除をしましょう",
-                rate: 4
+                detail: "週に一回、しっかりお風呂そうじ。きれいにできたか、あとでパパがチェック！",
+                rate: 2,
+                score: 10,
+                image: "./style/images/mission4_scrubing.png"
             },{
-                title: "リビングの拭きそうじ",
-                rate: 5,
-                detail: "クイックルワイパーを使って簡単♩"
+                title: "年末の大そうじ",
+                rate: 3,
+                detail: "年に一度の大ミッション！これをクリアしないと年は越せない！？",
+                score: 7,
+                image: "./style/images/mission5_sweeping.png"
+            },{
+                title: "フローリングのお掃除（スポンサーミッション）",
+                detail: "フローリンを掃除するならこれ！このミッションをクリアすればあなたのクイックルマスター！",
+                rate: 1,
+                score: 9,
+                image: "./style/images/mission6_QuickleWiper.png"
             }] as TaskPreset[]
         }
 
@@ -147,8 +174,8 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
             this.setState({schedular: newSchedular});
         }
 
-        onTaskClick(navigator, task: Task){
-            const newTask = {...this.state.newTask, title: task.title};
+        onTaskClick(navigator, task: TaskPreset){
+            const newTask = {...this.state.newTask, title: task.title, image: task.image};
             this.setState({newTask: newTask});
 
 
@@ -201,6 +228,8 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
         }
 
         renderRow(navigator, row: TaskPreset, index: number) {
+            const score = Math.floor(row.score);
+            const scoreClass = `task-preset-score task-preset-score-${score}`;
             const stars = [0,1,2,3,4].map((i)=>{
                 if(i < row.rate){
                     return <Icon icon="md-star" style={{color: "#CC0"}}></Icon>
@@ -210,7 +239,7 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
             })
             return <ListItem key={index} onClick={this.onTaskClick.bind(this, navigator, row)}>
               <div className="left">
-                  <img src={`http://placekitten.com/g/40/40`} className="list-item__thumbnail" />
+                  <img src={row.image} className="list-item__thumbnail" />
               </div>
               <div className='center'>
                 <div>
@@ -220,6 +249,9 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
                     {stars}
                 </div>
                 </div>
+              </div>
+              <div className="right">
+                <span className={scoreClass}>{row.score}</span>
               </div>
             </ListItem>
           }
@@ -260,12 +292,10 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
                 </Page>
             }else if(wizardPage === WizardPage.SelectList){
                 return <Page renderToolbar={this.renderToolbar.bind(this, route, navigator)}>
-                    <PullHook onChange={this.handlePullHookChange.bind(this)} thresholdHeight={200}>
-                        {this.renderPullHookContent()}
-                    </PullHook>
                     <SearchInput placeholder="検索" style={{width: "100%"}}/>
                     <List dataSource={this.state.presets}
-                        renderRow={this.renderRow.bind(this, navigator)}>
+                        renderRow={this.renderRow.bind(this, navigator)}
+                        className="scrollable fill">
                     </List>
                 </Page>
             }else if(wizardPage === WizardPage.SelectSchedule){
@@ -375,7 +405,7 @@ export class RegisterWizardPage extends React.Component<RegisterWizardPageProps,
                 <Navigator
                 renderPage={this.renderPage.bind(this)}
                 initialRoute={{
-                    title: WizardPage[WizardPage.SelectKind],
+                    title: WizardPage[WizardPage.SelectList],
                     hasBackButton: false,
                 }}
                 />

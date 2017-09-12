@@ -31,13 +31,11 @@ export class RegisterPage extends React.Component<RegisterPageProps, any> {
                     <Col>
                         <button className="register-top-button register-top-button-plus"
                             onClick={this.onStartWizardPlusClick.bind(this)}>
-                            足し算
                         </button>
                     </Col>
                     <Col>
                         <button className="register-top-button register-top-button-minus" 
                             onClick={this.onStartWizardMinusClick.bind(this)}>
-                            引き算
                         </button>
                     </Col>
                 </Row>

@@ -11,7 +11,7 @@ module.exports = [{
     module: {
       loaders: [
         { test: /\.ts(x?)$/, loader: "ts-loader" },
-        { test: /\.css$/, loaders: ["style-loader", "css-loader"] }
+        //{ test: /\.css$/, loaders: ["style-loader", "css-loader"] }
       ]
     },
     target: "web",

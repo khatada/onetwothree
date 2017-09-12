@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Page, Toolbar, List, ListItem, PullHook} from "react-onsenui";
+import {Page, Toolbar, List, ListItem, PullHook, Dialog, Button} from "react-onsenui";
 import {notification} from "onsenui";
 
 
@@ -12,6 +12,7 @@ export interface DashboardPageProps extends AppState{
 export class DashboardPage extends React.Component<DashboardPageProps, {}> {
 
   state = {
+    dialogShown: true
   }
 
   randomData(max: number, length: number){
@@ -22,6 +23,14 @@ export class DashboardPage extends React.Component<DashboardPageProps, {}> {
       }
       return list
   }
+
+  hideDialog(){
+    this.setState({dialogShown: false});
+ }
+
+ showDialog(){
+    this.setState({dialogShown: true});
+ }
 
   render() {
     const barOptions = {
@@ -82,6 +91,8 @@ export class DashboardPage extends React.Component<DashboardPageProps, {}> {
         labels: ["完了", "残り"]
     }
 
+
+
     return <Page renderToolbar={() =>{
           return <Toolbar>
                     <div className="center">活動</div>
@@ -94,7 +105,11 @@ export class DashboardPage extends React.Component<DashboardPageProps, {}> {
                 options={barOptions}
                 width={300}
                 height={160}/>
+                <div style={{width: "100%", height: 0}}/>
+                <h2>100回のミッションをクリア!</h2>
+            <div className="goal-mock"/>
         </div>
+
       </Page>
   }
 }
